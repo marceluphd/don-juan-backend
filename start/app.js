@@ -16,6 +16,7 @@ const providers = [
   '@adonisjs/bodyparser/providers/BodyParserProvider',
   '@adonisjs/cors/providers/CorsProvider',
   '@adonisjs/lucid/providers/LucidProvider',
+  'adonis-acl/providers/AclProvider',
   '@adonisjs/lucid-slugify/providers/SlugifyProvider',
   'adonis-kue/providers/KueProvider',
   '@adonisjs/redis/providers/RedisProvider',
@@ -37,7 +38,8 @@ const providers = [
 */
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
-  'adonis-kue/providers/CommandsProvider'
+  'adonis-kue/providers/CommandsProvider',
+  'adonis-acl/providers/CommandsProvider'
 ]
 
 /*
@@ -52,7 +54,10 @@ const aceProviders = [
 |   { Route: 'Adonis/Src/Route' }
 |
 */
-const aliases = {}
+const aliases = {
+  Role: 'Adonis/Acl/Role',
+  Permission: 'Adonis/Acl/Permission'
+}
 
 /*
 |--------------------------------------------------------------------------

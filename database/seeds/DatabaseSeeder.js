@@ -10,29 +10,38 @@
 |
 */
 
-// const User = use('App/Models/User')
+const User = use('App/Models/User')
 
-// const Role = use('Adonis/Acl/Role')
+const Role = use('Adonis/Acl/Role')
 
 class DatabaseSeeder {
   async run () {
-    // const user = await User.create({
-    //   name: 'Luiz Cláudio',
-    //   email: 'luizcns18@gmail.com',
-    //   password: '123456'
-    // })
+    const adminUser = await User.create({
+      name: 'Admin user',
+      email: 'admin@gmail.com',
+      password: '123456'
+    })
 
-    // const admin = await Role.create({
-    //   slug: 'administrator',
-    //   name: 'Administrator'
-    // })
+    const regularUser = await User.create({
+      name: 'Regular user',
+      email: 'regular@gmail.com',
+      password: '123456'
+    })
 
-    // await Role.create({
-    //   slug: 'user',
-    //   name: 'User'
-    // })
+    const adminRole = await Role.create({
+      slug: 'administrator',
+      name: 'Administrator',
+      description: 'System administrator'
+    })
 
-    // await user.roles().attach([admin.id])
+    const userRole = await Role.create({
+      slug: 'user',
+      name: 'User',
+      description: 'Regular user'
+    })
+
+    await adminUser.roles().attach([adminRole.id])
+    await regularUser.roles().attach([userRole.id])
   }
 }
 

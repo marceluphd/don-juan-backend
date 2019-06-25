@@ -33,7 +33,9 @@ class ExceptionHandler extends BaseExceptionHandler {
    * Report exception for logging or debugging.
    */
   async report (error) {
-    Sentry.captureException(error)
+    if (error.name !== 'ValidationException') {
+      Sentry.captureException(error)
+    }
   }
 }
 
