@@ -18,6 +18,8 @@ const Product = use('App/Models/Product')
 
 const Type = use('App/Models/Type')
 
+const Size = use('App/Models/Size')
+
 class DatabaseSeeder {
   async run () {
     // Users
@@ -157,6 +159,26 @@ class DatabaseSeeder {
       'name': 'Sausage',
       'image': 'https://s3.amazonaws.com/bootcamp.fs/Pizzas/6.png',
       'product_id': calzoneProduct.id
+    })
+
+    // Sizes
+    const small = await Size.create({
+      'name': 'Small',
+      'image': 'https://s3.amazonaws.com/bootcamp.fs/Tamanhos/tamanho-gg.png'
+    })
+
+    const medium = await Size.create({
+      'name': 'Medium',
+      'image': 'https://s3.amazonaws.com/bootcamp.fs/Tamanhos/tamanho-gg.png'
+    })
+    const large = await Size.create({
+      'name': 'Large',
+      'image': 'https://s3.amazonaws.com/bootcamp.fs/Tamanhos/tamanho-gg.png'
+    })
+
+    const extraLarge = await Size.create({
+      'name': 'Extra Large',
+      'image': 'https://s3.amazonaws.com/bootcamp.fs/Tamanhos/tamanho-gg.png'
     })
   }
 }
