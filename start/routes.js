@@ -20,3 +20,14 @@ Route.post('users', 'UserController.store').validator('User')
 
 // Sessions
 Route.post('sessions', 'SessionController.store').validator('Session').middleware('device')
+
+// Protected routes
+Route.group(() => {
+  Route.resource('products', 'ProductController')
+    .apiOnly()
+    .validator(new Map([[['products.store'], ['Product']]]))
+    .middleware(
+      new Map([
+        [['products.store', 'products.update', 'products.destroy'], ['is:administrator']]
+      ]))
+}).middleware('auth')
