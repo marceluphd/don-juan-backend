@@ -12,7 +12,9 @@ class TypeController {
    *
    */
   async index ({ params }) {
-    const types = await Type.query().where('product_id', params.products_id).fetch()
+    const types = await Type.query()
+      .where('product_id', params.products_id) // with('product')
+      .fetch()
 
     return types
   }

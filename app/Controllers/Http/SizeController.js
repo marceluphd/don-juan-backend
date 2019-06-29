@@ -1,8 +1,6 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Size = use('App/Models/Size')
 
 /**
  * Resourceful controller for interacting with sizes
@@ -12,81 +10,62 @@ class SizeController {
    * Show a list of all sizes.
    * GET sizes
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
+  async index () {
+    const sizes = await Size.all()
 
-  /**
-   * Render a form to be used for creating a new size.
-   * GET sizes/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+    return sizes
   }
 
   /**
    * Create/save a new size.
    * POST sizes
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request }) {
+    const data = request.only(['name', 'image'])
+
+    const size = await Size.create(data)
+
+    return size
   }
 
   /**
    * Display a single size.
    * GET sizes/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show ({ params }) {
+    const size = await Size.findOrFail(params.id)
 
-  /**
-   * Render a form to update an existing size.
-   * GET sizes/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+    return size
   }
 
   /**
    * Update size details.
    * PUT or PATCH sizes/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    const size = await Size.findOrFail(params.id)
+
+    const data = request.only(['name', 'image'])
+
+    size.merge(data)
+
+    await size.save()
+
+    return size
   }
 
   /**
    * Delete a size with id.
    * DELETE sizes/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
+    const size = await Size.findOrFail(params.id)
+
+    await size.delete()
   }
 }
 

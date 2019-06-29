@@ -38,4 +38,12 @@ Route.group(() => {
       new Map([
         [['products.types.store', 'products.types.update', 'products.types.destroy'], ['is:administrator']]
       ]))
+
+  Route.resource('sizes', 'SizeController')
+    .apiOnly()
+    .validator(new Map([[['sizes.store'], ['Size']]]))
+    .middleware(
+      new Map([
+        [['sizes.store', 'sizes.update', 'sizes.destroy'], ['is:administrator']]
+      ]))
 }).middleware('auth')
