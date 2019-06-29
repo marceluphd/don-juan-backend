@@ -12,7 +12,7 @@ class ProductController {
    *
    */
   async index ({ request }) {
-    const products = await Product.all()
+    const products = await Product.query().with('file').fetch()
 
     return products
   }
@@ -23,7 +23,7 @@ class ProductController {
    *
    */
   async store ({ request }) {
-    const data = request.only(['name', 'description', 'time', 'image'])
+    const data = request.only(['name', 'description', 'time', 'file_id'])
 
     const product = await Product.create(data)
 
@@ -38,6 +38,8 @@ class ProductController {
   async show ({ params }) {
     const product = await Product.findOrFail(params.id)
 
+    await product.load('file')
+
     return product
   }
 
@@ -49,7 +51,7 @@ class ProductController {
   async update ({ params, request }) {
     const product = await Product.findOrFail(params.id)
 
-    const data = request.only(['name', 'description', 'time', 'image'])
+    const data = request.only(['name', 'description', 'time', 'file_id'])
 
     product.merge(data)
 

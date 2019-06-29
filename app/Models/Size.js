@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Size extends Model {
+  file () {
+    return this.belongsTo('App/Models/File')
+  }
 }
 
 module.exports = Size

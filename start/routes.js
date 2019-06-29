@@ -33,13 +33,11 @@ Route.group(() => {
       ]))
 
   // Types
-  Route.resource('products.types', 'TypeController')
-    .apiOnly()
-    .validator(new Map([[['products.types.store'], ['Type']]]))
-    .middleware(
-      new Map([
-        [['products.types.store', 'products.types.update', 'products.types.destroy'], ['is:administrator']]
-      ]))
+  Route.get('/products/:products_id/types', 'TypeController.index')
+  Route.post('/products/:products_id/types', 'TypeController.store').validator('Type').middleware('is:administrator')
+  Route.get('/types/:id', 'TypeController.show')
+  Route.put('/types/:id', 'TypeController.update').middleware('is:administrator')
+  Route.delete('/types/:id', 'TypeController.destroy').middleware('is:administrator')
 
   // Sizes
   Route.resource('sizes', 'SizeController')
@@ -54,4 +52,7 @@ Route.group(() => {
   Route.resource('orders', 'OrderController')
     .apiOnly()
     .validator(new Map([[['orders.store'], ['Order']]]))
+
+  // Files
+  Route.resource('files', 'FileController')
 }).middleware('auth')

@@ -8,7 +8,7 @@ class Product extends BaseValidator {
       name: 'required',
       description: 'required',
       time: 'required',
-      image: 'required|url'
+      file_id: 'required'
     }
   }
 }

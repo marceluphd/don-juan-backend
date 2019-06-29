@@ -13,7 +13,8 @@ class TypeController {
    */
   async index ({ params }) {
     const types = await Type.query()
-      .where('product_id', params.products_id) // with('product')
+      .where('product_id', params.products_id)
+      .with('file')
       .fetch()
 
     return types
@@ -25,7 +26,7 @@ class TypeController {
    *
    */
   async store ({ request, params }) {
-    const data = request.only(['name', 'image'])
+    const data = request.only(['name', 'file_id'])
 
     const type = Type.create({ ...data, product_id: params.products_id })
 
@@ -40,6 +41,8 @@ class TypeController {
   async show ({ params }) {
     const type = await Type.findOrFail(params.id)
 
+    await type.load('file')
+
     return type
   }
 
@@ -51,7 +54,7 @@ class TypeController {
   async update ({ params, request }) {
     const type = await Type.findOrFail(params.id)
 
-    const data = request.only(['name', 'image'])
+    const data = request.only(['name', 'file_id'])
 
     type.merge(data)
 

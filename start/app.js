@@ -24,7 +24,8 @@ const providers = [
   '@adonisjs/framework/providers/ViewProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
   '@adonisjs/antl/providers/AntlProvider',
-  'adonis-sentry/providers/Sentry'
+  'adonis-sentry/providers/Sentry',
+  '@adonisjs/drive/providers/DriveProvider'
 ]
 
 /*

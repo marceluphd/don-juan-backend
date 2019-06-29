@@ -10,7 +10,14 @@ class ProductSchema extends Schema {
       table.string('name').notNullable()
       table.string('description').notNullable()
       table.integer('time').notNullable()
-      table.string('image').notNullable()
+      table
+        .integer('file_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('files')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
       table.timestamps()
     })
   }

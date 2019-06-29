@@ -12,7 +12,7 @@ class SizeController {
    *
    */
   async index () {
-    const sizes = await Size.all()
+    const sizes = await Size.query().with('file').fetch()
 
     return sizes
   }
@@ -23,7 +23,7 @@ class SizeController {
    *
    */
   async store ({ request }) {
-    const data = request.only(['name', 'image'])
+    const data = request.only(['name', 'file_id'])
 
     const size = await Size.create(data)
 
@@ -38,6 +38,8 @@ class SizeController {
   async show ({ params }) {
     const size = await Size.findOrFail(params.id)
 
+    size.load('file')
+
     return size
   }
 
@@ -49,7 +51,7 @@ class SizeController {
   async update ({ params, request }) {
     const size = await Size.findOrFail(params.id)
 
-    const data = request.only(['name', 'image'])
+    const data = request.only(['name', 'file_id'])
 
     size.merge(data)
 

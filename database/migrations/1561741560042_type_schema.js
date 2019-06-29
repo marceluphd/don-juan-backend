@@ -8,7 +8,6 @@ class TypeSchema extends Schema {
     this.create('types', (table) => {
       table.increments()
       table.string('name').notNullable()
-      table.string('image').notNullable()
       table
         .integer('product_id')
         .unsigned()
@@ -17,6 +16,14 @@ class TypeSchema extends Schema {
         .inTable('products')
         .onUpdate('CASCADE')
         .onDelete('SET NULL')
+      table
+        .integer('file_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('files')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
       table.timestamps()
     })
   }

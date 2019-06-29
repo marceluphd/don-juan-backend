@@ -6,7 +6,7 @@ class Size extends BaseValidator {
   get rules () {
     return {
       name: 'required',
-      image: 'required|url'
+      file_id: 'required'
     }
   }
 }
