@@ -1,13 +1,13 @@
 {
-  "name": "adonis-api-app",
+  "name": "don-juan-pizzeria-api",
   "version": "4.1.0",
   "adonis-version": "4.1.0",
-  "description": "Omistack Sass Backend",
+  "description": "Don Juan Pizzeria Backend",
   "author": "Luiz Cláudio <luizcns18@gmail.com>",
   "main": "index.js",
   "scripts": {
     "dev": "adonis serve --dev",
-    "kue": "adonis kue:listen",
+    "queue": "adonis kue:listen",
     "start": "node server.js",
     "test": "node ace test"
   },

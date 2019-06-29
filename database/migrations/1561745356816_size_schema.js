@@ -9,6 +9,7 @@ class SizeSchema extends Schema {
       table.increments()
       table.string('description').notNullable()
       table.string('email').notNullable()
+      table.string('image').notNullable()
       table.timestamps()
     })
   }
