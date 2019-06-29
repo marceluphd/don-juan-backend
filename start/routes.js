@@ -23,6 +23,7 @@ Route.post('sessions', 'SessionController.store').validator('Session').middlewar
 
 // Protected routes
 Route.group(() => {
+  // Products
   Route.resource('products', 'ProductController')
     .apiOnly()
     .validator(new Map([[['products.store'], ['Product']]]))
@@ -31,6 +32,7 @@ Route.group(() => {
         [['products.store', 'products.update', 'products.destroy'], ['is:administrator']]
       ]))
 
+  // Types
   Route.resource('products.types', 'TypeController')
     .apiOnly()
     .validator(new Map([[['products.types.store'], ['Type']]]))
@@ -39,6 +41,7 @@ Route.group(() => {
         [['products.types.store', 'products.types.update', 'products.types.destroy'], ['is:administrator']]
       ]))
 
+  // Sizes
   Route.resource('sizes', 'SizeController')
     .apiOnly()
     .validator(new Map([[['sizes.store'], ['Size']]]))
@@ -46,4 +49,9 @@ Route.group(() => {
       new Map([
         [['sizes.store', 'sizes.update', 'sizes.destroy'], ['is:administrator']]
       ]))
+
+  // Orders
+  Route.resource('orders', 'OrderController')
+    .apiOnly()
+    .validator(new Map([[['orders.store'], ['Order']]]))
 }).middleware('auth')

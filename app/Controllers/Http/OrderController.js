@@ -1,8 +1,6 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Order = use('App/Models/Order')
 
 /**
  * Resourceful controller for interacting with orders
@@ -12,81 +10,108 @@ class OrderController {
    * Show a list of all orders.
    * GET orders
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
+  async index ({ auth }) {
+    if (await auth.user.is('administrator')) {
+      return Order.all()
+    }
 
-  /**
-   * Render a form to be used for creating a new order.
-   * GET orders/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+    const orders = await auth.user.orders().fetch()
+    // const orders = Order.query().where('user_id', auth.user.id).fetch()
+
+    return orders
   }
 
   /**
    * Create/save a new order.
    * POST orders
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, auth }) {
+    const data = request.only(['note', 'zip_code', 'street', 'number', 'district', 'delivered'])
+
+    const order = Order.create({ ...data, user_id: auth.user.id })
+
+    return order
   }
 
   /**
    * Display a single order.
    * GET orders/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show ({ params, auth, response }) {
+    const order = await Order.findOrFail(params.id)
 
-  /**
-   * Render a form to update an existing order.
-   * GET orders/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+    if (await auth.user.is('user') && auth.user.id !== order.user_id) {
+      return response.status(401).send({
+        error: {
+          message: 'Only the order owner or the administrator can see it.'
+        }
+      })
+    }
+
+    return order
   }
 
   /**
    * Update order details.
    * PUT or PATCH orders/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request, auth, response }) {
+    const order = await Order.findOrFail(params.id)
+
+    if (await auth.user.is('user') && auth.user.id !== order.user_id) {
+      return response.status(401).send({
+        error: {
+          message: 'Only the order owner or the administrator can edit it.'
+        }
+      })
+    }
+
+    if (order.delivered) {
+      return response.status(401).send({
+        error: {
+          message: 'You can not edit an order that has been delivered'
+        }
+      })
+    }
+
+    const data = request.only(['note', 'zip_code', 'street', 'number', 'district', 'delivered'])
+
+    order.merge(data)
+
+    await order.save
+
+    return order
   }
 
   /**
    * Delete a order with id.
    * DELETE orders/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, auth, response }) {
+    const order = await Order.findOrFail(params.id)
+
+    if (await auth.user.is('user') && auth.user.id !== order.user_id) {
+      return response.status(401).send({
+        error: {
+          message: 'Only the order owner or the administrator can delete it.'
+        }
+      })
+    }
+
+    if (order.delivered) {
+      return response.status(401).send({
+        error: {
+          message: 'You can not delete an order that has been delivered'
+        }
+      })
+    }
+
+    await order.delete()
   }
 }
 

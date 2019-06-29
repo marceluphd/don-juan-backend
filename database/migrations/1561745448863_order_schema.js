@@ -7,11 +7,12 @@ class OrderSchema extends Schema {
   up () {
     this.create('orders', (table) => {
       table.increments()
-      table.string('observation').notNullable()
-      table.string('zip_code')
-      table.string('city').notNullable()
+      table.string('note')
+      table.string('zip_code').notNullable()
       table.string('street').notNullable()
       table.integer('number').notNullable()
+      table.string('district').notNullable()
+      table.boolean('delivered').defaultTo(false).notNullable()
       table
         .integer('user_id')
         .unsigned()
