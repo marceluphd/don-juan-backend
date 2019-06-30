@@ -7,6 +7,10 @@ class Size extends Model {
   file () {
     return this.belongsTo('App/Models/File')
   }
+
+  types () {
+    return this.belongsToMany('App/Models/Type').pivotModel('App/Models/TypeSize')
+  }
 }
 
 module.exports = Size

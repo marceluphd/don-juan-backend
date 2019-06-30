@@ -48,6 +48,10 @@ Route.group(() => {
         [['sizes.store', 'sizes.update', 'sizes.destroy'], ['is:administrator']]
       ]))
 
+  // TypeSizes
+  Route.get('/types/:types_id/sizes', 'TypeSizeController.index')
+  Route.post('types/:types_id/sizes', 'TypeSizeController.store').validator('TypeSize').middleware('is:administrator')
+
   // Orders
   Route.resource('orders', 'OrderController')
     .apiOnly()

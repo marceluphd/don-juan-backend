@@ -4,6 +4,17 @@
 const Model = use('Model')
 
 class TypeSize extends Model {
+  static get table () {
+    return 'type_size'
+  }
+
+  size () {
+    return this.belongsTo('App/Models/Size')
+  }
+
+  orders () {
+    return this.belongsToMany('App/Models/Order').pivotModel('App/Models/Item')
+  }
 }
 
 module.exports = TypeSize

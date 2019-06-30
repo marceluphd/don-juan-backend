@@ -1,8 +1,6 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const TypeSize = use('App/Models/TypeSize')
 
 /**
  * Resourceful controller for interacting with typesizes
@@ -12,68 +10,41 @@ class TypeSizeController {
    * Show a list of all typesizes.
    * GET typesizes
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
+  async index ({ params }) {
+    const typeSizes = await TypeSize.query()
+      .where('type_id', params.types_id)
+      .with('size')
+      .fetch()
 
-  /**
-   * Render a form to be used for creating a new typesize.
-   * GET typesizes/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+    return typeSizes
   }
 
   /**
    * Create/save a new typesize.
    * POST typesizes
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, params }) {
+    const data = request.only(['size_id', 'price'])
+
+    const typeSize = TypeSize.create({ ...data, type_id: params.types_id })
+
+    return typeSize
   }
 
   /**
    * Display a single typesize.
    * GET typesizes/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing typesize.
-   * GET typesizes/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
   }
 
   /**
    * Update typesize details.
    * PUT or PATCH typesizes/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
   }
@@ -82,9 +53,6 @@ class TypeSizeController {
    * Delete a typesize with id.
    * DELETE typesizes/:id
    *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
   }
