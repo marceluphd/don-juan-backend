@@ -14,12 +14,13 @@ class OrderController {
    *
    */
   async index ({ auth }) {
-    if (await auth.user.is('administrator')) {
-      return Order.query().with('items.typeSize').orderBy('id', 'desc').fetch()
+    let query = Order.query()
+
+    if (await auth.user.is('user')) {
+      query.where('user_id', auth.user.id)
     }
 
-    // const orders = await auth.user.orders().typeSizes().fetch()
-    const orders = Order.query().where('user_id', auth.user.id).with('items.typeSize').fetch()
+    const orders = query.with('items.typeSize.size').with('items.typeSize.type').fetch()
 
     return orders
   }
