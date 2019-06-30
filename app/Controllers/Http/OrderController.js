@@ -2,6 +2,8 @@
 
 const Order = use('App/Models/Order')
 
+const Database = use('Database')
+
 /**
  * Resourceful controller for interacting with orders
  */
@@ -30,11 +32,15 @@ class OrderController {
   async store ({ request, auth }) {
     const orderData = request.only(['note', 'zip_code', 'street', 'number', 'district', 'delivered'])
 
-    const order = await Order.create({ ...orderData, user_id: auth.user.id })
+    const trx = await Database.beginTransaction()
+
+    const order = await Order.create({ ...orderData, user_id: auth.user.id }, trx)
 
     const { items } = request.only(['items'])
 
-    await order.items().createMany(items)
+    await order.items().createMany(items, trx)
+
+    await trx.commit()
 
     return order
   }
