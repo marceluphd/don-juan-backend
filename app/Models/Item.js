@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Item extends Model {
+  typeSize () {
+    return this.belongsTo('App/Models/TypeSize')
+  }
 }
 
 module.exports = Item

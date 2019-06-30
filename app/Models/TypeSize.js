@@ -12,6 +12,10 @@ class TypeSize extends Model {
     return this.belongsTo('App/Models/Size')
   }
 
+  type () {
+    return this.belongsTo('App/Models/Type')
+  }
+
   orders () {
     return this.belongsToMany('App/Models/Order').pivotModel('App/Models/Item')
   }

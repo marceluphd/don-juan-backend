@@ -13,11 +13,11 @@ class OrderController {
    */
   async index ({ auth }) {
     if (await auth.user.is('administrator')) {
-      return Order.all()
+      return Order.query().with('items.typeSize').orderBy('id', 'desc').fetch()
     }
 
-    const orders = await auth.user.orders().fetch()
-    // const orders = Order.query().where('user_id', auth.user.id).fetch()
+    // const orders = await auth.user.orders().typeSizes().fetch()
+    const orders = Order.query().where('user_id', auth.user.id).with('items.typeSize').fetch()
 
     return orders
   }
@@ -28,9 +28,13 @@ class OrderController {
    *
    */
   async store ({ request, auth }) {
-    const data = request.only(['note', 'zip_code', 'street', 'number', 'district', 'delivered'])
+    const orderData = request.only(['note', 'zip_code', 'street', 'number', 'district', 'delivered'])
 
-    const order = Order.create({ ...data, user_id: auth.user.id })
+    const order = await Order.create({ ...orderData, user_id: auth.user.id })
+
+    const { items } = request.only(['items'])
+
+    await order.items().createMany(items)
 
     return order
   }
@@ -50,6 +54,8 @@ class OrderController {
         }
       })
     }
+
+    await order.load('items.typeSize')
 
     return order
   }
