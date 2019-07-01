@@ -35,6 +35,12 @@ class DatabaseSeeder {
       password: '123456'
     })
 
+    const regularUser2 = await User.create({
+      name: 'Regular user2',
+      email: 'regular2@gmail.com',
+      password: '123456'
+    })
+
     // Roles
     const adminRole = await Role.create({
       slug: 'administrator',
@@ -51,6 +57,7 @@ class DatabaseSeeder {
     // User-Roles
     await adminUser.roles().attach([adminRole.id])
     await regularUser.roles().attach([userRole.id])
+    await regularUser2.roles().attach([userRole.id])
 
     // Files
     const FileModel = Factory.model('App/Models/File')
@@ -160,25 +167,25 @@ class DatabaseSeeder {
     const typeProduct13 = await Type.create({
       name: 'Sausage',
       file_id: typeFile3.id,
-      product_id: pizzaProduct.id
+      product_id: calzoneProduct.id
     })
 
     const typeProduct14 = await Type.create({
       name: 'Basil',
       file_id: typeFile4.id,
-      product_id: pizzaProduct.id
+      product_id: calzoneProduct.id
     })
 
     const typeProduct15 = await Type.create({
       name: 'Parmesan',
       file_id: typeFile5.id,
-      product_id: pizzaProduct.id
+      product_id: calzoneProduct.id
     })
 
     const typeProduct16 = await Type.create({
       name: 'Ground beef',
       file_id: typeFile6.id,
-      product_id: pizzaProduct.id
+      product_id: calzoneProduct.id
     })
 
     // Sizes
@@ -200,7 +207,7 @@ class DatabaseSeeder {
     const typeSize1 = await TypeSize.create({
       type_id: typeProduct1.id,
       size_id: extraLargeSize.id,
-      price: 39.00
+      price: 39.70
     })
 
     const typeSize2 = await TypeSize.create({
@@ -503,7 +510,7 @@ class DatabaseSeeder {
     })
 
     await order1.items().createMany([
-      { type_size_id: typeSize1.id, quantity: 2 },
+      { type_size_id: typeSize1.id, quantity: 1 },
       { type_size_id: typeSize2.id, quantity: 1 },
       { type_size_id: typeSize3.id, quantity: 3 }
     ])
@@ -524,6 +531,15 @@ class DatabaseSeeder {
     await order3.items().createMany([
       { type_size_id: typeSize6.id, quantity: 1 },
       { type_size_id: typeSize7.id, quantity: 1 }
+    ])
+
+    const order4 = await OrderModel.create({
+      user_id: regularUser2.id
+    })
+
+    await order4.items().createMany([
+      { type_size_id: typeSize6.id, quantity: 3 },
+      { type_size_id: typeSize7.id, quantity: 2 }
     ])
   }
 }

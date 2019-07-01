@@ -27,7 +27,7 @@ Factory.blueprint('App/Models/File', async (faker, i, data) => {
 Factory.blueprint('App/Models/Product', async (faker, i, data) => {
   return {
     name: data.name,
-    description: faker.sentence(),
+    description: faker.sentence({ words: 10 }),
     time: faker.minute()
   }
 })
