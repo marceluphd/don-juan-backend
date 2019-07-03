@@ -15,6 +15,7 @@ class TypeSizeController {
     const typeSizes = await TypeSize.query()
       .where('type_id', params.types_id)
       .with('size.file')
+      .with('type.file')
       .fetch()
 
     return typeSizes
