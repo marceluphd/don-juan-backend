@@ -20,7 +20,13 @@ class OrderController {
       query.where('user_id', auth.user.id)
     }
 
-    const orders = query.with('items.typeSize.size').with('items.typeSize.type').orderBy('id', 'desc').fetch()
+    const orders = query
+      .with('items.typeSize.size')
+      .with('items.typeSize.type.product')
+      .with('items.typeSize.type.file')
+      .with('user')
+      .orderBy('id', 'desc')
+      .fetch()
 
     return orders
   }
