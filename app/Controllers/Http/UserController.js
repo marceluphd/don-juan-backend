@@ -17,6 +17,23 @@ class UserController {
 
     return token
   }
+
+  /**
+  * Display a single user.
+  * GET users/:id
+  *
+  */
+  async show ({ auth, response }) {
+    if (!auth.user) {
+      return response.status(401).send({
+        error: {
+          message: 'Only the user himself can see the own data.'
+        }
+      })
+    }
+
+    return auth.user
+  }
 }
 
 module.exports = UserController

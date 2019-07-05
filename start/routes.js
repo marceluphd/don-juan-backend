@@ -23,6 +23,9 @@ Route.post('sessions', 'SessionController.store').validator('Session').middlewar
 
 // Protected routes
 Route.group(() => {
+  // User
+  Route.get('users', 'UserController.show')
+
   // Products
   Route.resource('products', 'ProductController')
     .apiOnly()
